@@ -2,7 +2,7 @@ const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
 const http = require('http');
-const webSocket = require('ws');
+const PROT = 3000;
 
 const app = express();
 const server = http.createServer(app);
@@ -10,6 +10,7 @@ const wss = new webSocket.Server({ server });
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res, next) => {
   res.send('express');
@@ -31,4 +32,6 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
-server.listen(3000);
+server.listen(PROT, () => {
+  console.log(`open port ${PROT}`);
+});
