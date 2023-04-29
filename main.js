@@ -4,6 +4,7 @@ const logger = require('morgan');
 const http = require('http');
 const socketIo = require('socket.io').Server;
 const DeviceState = require('./model');
+const bcrypt = require('bcrypt');
 
 const PROT = 3000;
 
@@ -13,6 +14,14 @@ const server = http.createServer(app);
  * @type {socketIo}
  */
 const io = new socketIo(server);
+
+const PW = 'abcd1234';
+const encryptedPW = bcrypt.hashSync(PW, 10);
+
+const authCheck = (pw) => {
+  const encryptedPW = bcrypt.hashSync(pw, 10);
+  return bcrypt.compareSync(PW, encryptedPW);
+};
 
 var deviceState = new DeviceState();
 
@@ -24,7 +33,16 @@ app.get('/ping', (req, res, next) => {
   res.send('pong');
 });
 
+app.post('/auth_check', (req, res) => {
+  const result = authCheck(req.body.pw);
+  res.json({ result: result });
+});
+
 app.post('/now_data', (req, res) => {
+  if (!authCheck(req.body.pw)) {
+    return res.json({ error: 'pw error' });
+  }
+
   res.json(deviceState);
 });
 
@@ -51,5 +69,8 @@ server.listen(PROT, () => {
 io.on('connection', (socket) => {
   socket.on('data', (req) => {
     deviceState.updata(JSON.parse(req));
+  });
+  socket.on('disconnect', () => {
+    console.log('소켓 연결 해제');
   });
 });
