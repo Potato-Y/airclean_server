@@ -2,18 +2,30 @@ const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
 const http = require('http');
+const socketIo = require('socket.io').Server;
+const DeviceState = require('./model');
+
 const PROT = 3000;
 
 const app = express();
 const server = http.createServer(app);
-const wss = new webSocket.Server({ server });
+/**
+ * @type {socketIo}
+ */
+const io = new socketIo(server);
+
+var deviceState = new DeviceState();
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/', (req, res, next) => {
-  res.send('express');
+app.get('/ping', (req, res, next) => {
+  res.send('pong');
+});
+
+app.post('/now_data', (req, res) => {
+  res.json(deviceState);
 });
 
 // catch 404 and forward to error handler
@@ -34,4 +46,10 @@ app.use((err, req, res, next) => {
 
 server.listen(PROT, () => {
   console.log(`open port ${PROT}`);
+});
+
+io.on('connection', (socket) => {
+  socket.on('data', (req) => {
+    deviceState.updata(JSON.parse(req));
+  });
 });
