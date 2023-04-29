@@ -16,7 +16,6 @@ const server = http.createServer(app);
 const io = new socketIo(server);
 
 const PW = 'abcd1234';
-const encryptedPW = bcrypt.hashSync(PW, 10);
 
 const authCheck = (pw) => {
   const encryptedPW = bcrypt.hashSync(pw, 10);
@@ -46,6 +45,16 @@ app.post('/now_data', (req, res) => {
   res.json(deviceState);
 });
 
+app.post('/mode_change', (req, res) => {
+  if (!authCheck(req.body.pw)) {
+    return res.json({ error: 'pw error' });
+  }
+  
+  io.sockets.sockets.forEach((aSocket) => {
+    aSocket.send('mode_change', JSON.parse({ mode: req.body.mode }));
+  })
+});
+
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
@@ -71,6 +80,6 @@ io.on('connection', (socket) => {
     deviceState.updata(JSON.parse(req));
   });
   socket.on('disconnect', () => {
-    console.log('소켓 연결 해제');
+    deviceState = new DeviceState();
   });
 });
