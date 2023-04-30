@@ -33,16 +33,31 @@ app.get('/ping', (req, res, next) => {
 });
 
 app.post('/auth_check', (req, res) => {
-  const result = authCheck(req.body.pw);
-  res.json({ result: result });
+  if (!authCheck(req.body.pw)) {
+    return res.status(400).json({
+      errors: [
+        {
+          message: 'Not password',
+        },
+      ],
+    });
+  }
+
+  res.status(200).json({ result: true });
 });
 
 app.post('/now_data', (req, res) => {
   if (!authCheck(req.body.pw)) {
-    return res.json({ error: 'pw error' });
+    return res.status(400).json({
+      errors: [
+        {
+          message: 'Not password',
+        },
+      ],
+    });
   }
 
-  res.json(deviceState);
+  res.status(200).json(deviceState);
 });
 
 app.post('/mode_change', (req, res) => {
