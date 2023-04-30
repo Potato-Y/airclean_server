@@ -6,6 +6,10 @@ class DeviceState {
     this.uv; // uv 램프
     this.humidifier; // 가습기
     this.petier; // 펠티어
+    this.temperature; //온도
+    this.humidity; // 습도
+    this.dust={'1.0':null,'2.5':null,'10.0':null};
+
   }
 
   updata(json) {
@@ -15,6 +19,11 @@ class DeviceState {
     this.uv = json.uv;
     this.humidifier = json.humidifier;
     this.petier = json.petier;
+    this.temperature = json.temperature;
+    this.humidity = json.humidity;
+    this.dust["1.0"] = json.dust['1.0'];
+    this.dust['2.5'] = json.dust['2.5'];
+    this.dust['10.0'] = json.dust['10.0'];
   }
 
   get data() {

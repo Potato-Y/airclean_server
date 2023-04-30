@@ -23,6 +23,7 @@ const authCheck = (pw) => {
 };
 
 var deviceState = new DeviceState();
+// deviceState.updata(JSON.parse('{"state":true,"mode":"modes","windSpeed":1,"uv":true,"humidifier":false,"petier":false,"temperature":"20.2","humidity":40,"dust":{"1.0":13,"2.5":15,"10.0":20}}'));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -46,7 +47,7 @@ app.post('/auth_check', (req, res) => {
   res.status(200).json({ result: true });
 });
 
-app.post('/now_data', (req, res) => {
+app.post('/now_device_state', (req, res) => {
   if (!authCheck(req.body.pw)) {
     return res.status(400).json({
       errors: [
@@ -64,10 +65,10 @@ app.post('/mode_change', (req, res) => {
   if (!authCheck(req.body.pw)) {
     return res.json({ error: 'pw error' });
   }
-  
+
   io.sockets.sockets.forEach((aSocket) => {
     aSocket.send('mode_change', JSON.parse({ mode: req.body.mode }));
-  })
+  });
 });
 
 // catch 404 and forward to error handler
