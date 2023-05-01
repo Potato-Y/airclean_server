@@ -9,7 +9,7 @@ class DeviceState {
     this.temperature; //온도
     this.humidity; // 습도
     this.dust={'1.0':null,'2.5':null,'10.0':null};
-
+    this.gas;
   }
 
   updata(json) {
@@ -24,6 +24,7 @@ class DeviceState {
     this.dust["1.0"] = json.dust['1.0'];
     this.dust['2.5'] = json.dust['2.5'];
     this.dust['10.0'] = json.dust['10.0'];
+    this.gas = json.gas;
   }
 
   get data() {
