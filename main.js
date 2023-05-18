@@ -23,7 +23,7 @@ const authCheck = (pw) => {
 };
 
 var deviceState = new DeviceState();
-deviceState.updata(JSON.parse('{"state":true,"mode":"1","windSpeed":1,"uv":true,"humidifier":false,"petier":false,"temperature":"20.2","humidity":40,"dust":{"1.0":13,"2.5":15,"10.0":20},"gas":1}'));
+deviceState.updata(JSON.parse('{"state":true,"mode":1,"windSpeed":1,"uv":true,"humidifier":false,"petier":false,"temperature":"20.2","humidity":40,"dust":{"1.0":13,"2.5":15,"10.0":20},"gas":1}'));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -70,11 +70,15 @@ app.post('/mode_change', (req, res) => {
 
   try {
     io.sockets.sockets.forEach((aSocket) => {
-      aSocket.send('mode_change', JSON.parse({ mode: req.body.mode, humidityMode: req.body.humidityMode }));
+      console.log(JSON.stringify({ mode: req.body.mode, humidityMode: req.body.humidityMode }));
+      aSocket.emit('mode_change', JSON.stringify({ mode: req.body.mode, humidityMode: req.body.humidityMode }));
     });
   } catch (error) {
     console.error(error);
+    return res.json({ error: 'iot error' });
   }
+
+  return res.json({ error: false });
 });
 
 // catch 404 and forward to error handler
@@ -98,8 +102,10 @@ server.listen(PROT, () => {
 });
 
 io.on('connection', (socket) => {
+  console.log('connection');
   socket.on('data', (req) => {
-    deviceState.updata(JSON.parse(req));
+    console.log(req);
+    deviceState.updata(req);
   });
   socket.on('disconnect', () => {
     deviceState = new DeviceState();
