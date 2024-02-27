@@ -1,4 +1,4 @@
-# 에어깨긋해
+# 에어깨끗해
 🏫 본 프로젝트는 `전주대학교` `정보통신공학과` `캡스톤디자인` 프로젝트입니다.
 
 |이름|담당|Github|
@@ -18,7 +18,7 @@
 ## 사용 기술 스택
 <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
 <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white">
-<img src="https://img.shields.io/badge/socketdot.io-010101?style=for-the-badge&logo=socketdotio&logoColor=white">
+<img src="https://img.shields.io/badge/socket.io-010101?style=for-the-badge&logo=socketdotio&logoColor=white">
 
 ## 주요 기능
 - 사용자의 기기 조작 요청 처리
