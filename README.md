@@ -30,4 +30,4 @@
 
 ## 프로젝트 시스템 아키텍처
 
-![정통캡디 drawio](https://github.com/Potato-Y/airclean_server/assets/68105481/4ab39f8f-e911-4955-8218-f30d6b99a103)
+![정통캡디 drawio](https://github.com/Potato-Y/airclean_server/assets/68105481/617fecbe-451a-4bfe-b745-adf0fb98e664)
